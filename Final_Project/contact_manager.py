@@ -2,10 +2,27 @@ from contact import Contact
 import csv
 import pandas
 from datetime import date
+import phonenumbers
+import json
+import sys
 
 today = date.today()
 
 fields = ['Name', 'Number', 'Mail', 'Category', 'Country', 'Last Update']
+
+#with open(r"country.txt", 'r', encoding='utf-8') as file:
+#    country_dict = json.load(file)
+
+try:
+    with open(r"country.txt", 'r', encoding='utf-8') as file:
+        country_dict = json.load(file)
+except json.JSONDecodeError as e:
+    print(f"Error loading country data: {e}")
+    sys.exit()
+
+except FileNotFoundError as e:
+
+    sys.exit(f"\nCan't locate the 'country.txt' file\n {e}")
 
 def add_contact(Name, Number, Mail, Category, Country):
     """
@@ -106,20 +123,45 @@ def update_contact(index_point, update_term, new_term):
     df = pandas.read_csv(r'main.csv')
     df.columns = fields
 
+    print("Old:\n")
     print(search_print_contact(index_point))  # Display the current contact before updating
-
-    # Update the specific field based on the input
+    """
+    response = input("You want to update this Contact? (y/n): ")
+    if response.lower() in ['n', 'no']:
+        exit
+    elif response.lower() in ['y', 'yes']:
+        # Validate the input
+    """
+        # Update the specific field based on the input
     if update_term.lower() == 'name':
         df.loc[index_point, 'Name'] = new_term
     elif update_term.lower() == 'number':
-        df.loc[index_point, 'Number'] = new_term
+        if "+" in new_term:
+            extracted_values = extract_country(new_term, df.loc[index_point, 'Country'])
+            
+
+            df.loc[index_point, 'Country'] = f"{extracted_values[2]}"
+            df.loc[index_point, 'Number'] = extracted_values[1]
+
+        else:
+            df.loc[index_point, 'Number'] = new_term
+
+        
     elif update_term.lower() == 'mail':
         df.loc[index_point, 'Mail'] = new_term
+
     elif update_term.lower() == 'country':
-        df.loc[index_point, 'Country'] = new_term
+        for country_code, country_name in country_dict.items():
+            if country_name.lower() == new_term.lower():
+                country_code = country_code
+                break
+
+        df.loc[index_point, 'Country'] = f"{new_term.title()}({country_code})"
 
     df.loc[index_point, 'Last Update'] = today  # Set 'Last Update' to today
     df.to_csv(r'main.csv', index=False)  # Save changes back to the file
+    print("New:\n")
+    print(search_print_contact(index_point))
 
 def remove_contact(index_point):
     """
@@ -168,7 +210,8 @@ def search_print_contact(index_point):
     last_update = df.loc[index_point, 'Last Update']
 
     # Create a Contact object to return
-    contact = Contact(name, number, mail, category, country, last_update)
+    contact = Contact(name=name, number=number, mail=mail,
+                      category=category, country=country, last_update=last_update)
     return contact
 
 def search_info_contact(index_point, specific_info):
@@ -193,3 +236,47 @@ def search_info_contact(index_point, specific_info):
     # Grab the specific info field and return it in a formatted string
     info = df.loc[index_point, specific_info.title()]
     return f"{specific_info.title()}: {info}"
+
+
+def extract_country(number, country):
+    """
+    Extracts the country code from a contact number and returns the country name, the original number and 
+    country code in a list form.
+    """
+    try:        
+        if '+' in number:
+            no = phonenumbers.parse(number, None)
+            if country is not None:
+
+                if country.lower() != country_dict[f"+{no.country_code}"].lower():
+                    return "Mismatch Error"
+                
+            number_without_prefix = number.replace(f"+{no.country_code}", '')
+            country_name = country_dict[f"+{no.country_code}"]
+            return [f"+{no.country_code}", number_without_prefix, f"{country_name}(+{no.country_code})"]
+        
+        elif '+' not in number and country is not None:
+            for country_code, country_name in country_dict.items():
+                if country_name.lower() == country.lower():
+                    return [country_code, number, f"{country_name}({country_code})"]
+                
+                    
+        else:
+            print("Invalid Number Or Country Format")
+            return False
+    
+    except phonenumbers.NumberParseException:
+        print("Invalid phone number format. Please check the number and try again")
+        return False
+
+    except KeyError:
+        print("Country code not found in the database, Please check the country code and try again.")
+        return False
+
+    except IOError:
+        print("Something wrong with the country database")
+        return False
+    
+    except Exception as e:
+        print(f"An unexcepted error occurred: {e}")
+        return False

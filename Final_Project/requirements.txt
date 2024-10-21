@@ -6,3 +6,5 @@ re
 pycountry
 faker
 pytest
+phonenumbers
+json

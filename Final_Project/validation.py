@@ -32,7 +32,8 @@ def valid_name(name):
         return name.title()  # Simple name with capitalization
     else:
         return False  # Nope, that’s not a valid name
-    
+
+
 def valid_number(number):
     """
     Validates a phone number by removing spaces, parentheses, and dashes. 
@@ -54,9 +55,9 @@ def valid_number(number):
         return None
     
     number = re.sub(r'[\s()-]', '', number)  # Clean out all the fluff
-    if re.match(r"^\+?\d{10,15}$", number):  # Check for valid phone number format
+    if re.match(r"^\+?\d{10,15}$", number.strip()):  # Check for valid phone number format
         try:
-            return f'{number}'  # Return the string format number (nice and clean)
+            return f'{number.strip()}'  # Return the string format number (nice and clean)
         except ValueError:
             return False  # Something went wrong (though it shouldn’t)
     else:
@@ -128,12 +129,15 @@ def valid_country(country):
     >>> valid_country('IN')
     'India'
     """
-    try:
-        # Look up the country using pycountry
-        country_data = pycountry.countries.lookup(country)
-        return country_data.name  # Return the official name of the country
-    except LookupError:
-        return False  # Oops, couldn't find that country
+    if not country:  # Empty country? No validation needed then
+        return None
+    else:
+        try:
+            # Look up the country using pycountry
+            country_data = pycountry.countries.lookup(country)
+            return country_data.name.title()  # Return the official name of the country
+        except LookupError:
+            return False  # Oops, couldn't find that country
 
 def valid_exist(search_key):
     """
@@ -171,3 +175,20 @@ def valid_exist(search_key):
         return mail_matches.index.tolist()
     
     return False  # No match found, return False
+
+
+def valid_term(term):
+    
+    if valid_name(term) != False:
+        return ["name_type", valid_name(term)]
+    elif valid_number(term) != False:    
+        return ["number_type", valid_number(term)]
+    elif valid_mail(term) != False:
+        return ["mail_type", valid_mail(term)]
+    elif valid_category(term) != False:
+        return ["category_type", valid_category(term)]
+    elif valid_country(term) != False:
+        return ["country_type", valid_country(term)]
+    else:
+        print("Invalid Term")
+        return False

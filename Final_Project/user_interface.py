@@ -1,6 +1,7 @@
 from contact import Contact
 import validation
 import contact_manager
+import phonenumbers
 
 import sys
 
@@ -19,7 +20,7 @@ def main():
     """
     print('\n*** Contacts Manager Program ***')
     print("\nType 'help/h' for instructions\n"
-          "Type 'commands/c' for command list\n"
+          "Type 'commands/c' for the list of commands\n"
           "Type 'exit/e' to quit the program")
     
     while True:
@@ -68,6 +69,7 @@ def take_add_input():
     number = input("Number: ")
     mail = input("Mail: ")
     category = input("Category: ")
+    print("Optional, if the number have country code")
     country = input("Country: ")
 
     return name, number, mail, category, country
@@ -119,45 +121,95 @@ def add():
 
     if validation.valid_name(name) == None:
         print("Name can't be None")
-        resume_the_current_query = input("Resume the current query, Y/N: ")
-        if resume_the_current_query in ['yes', 'y', 'Y']:
-            add()
-        else:
-            main()
+        resume_to_the_current_query(add, main_function=main)
 
     elif validation.valid_name(name) == False:
         print("Problem with the Name...")
-        resume_the_current_query = input("Resume the current query, Y/N: ")
-        if resume_the_current_query in ['yes', 'y', 'Y']:
-            add()
-        else:
-            main()
+        resume_to_the_current_query(add, main_function=main)
 
     else:
         name = validation.valid_name(name)
-        if validation.valid_number(number) != False:
-            if validation.valid_mail(mail):
-                if validation.valid_category(category):
-                    if validation.valid_country(country) != False:
-                        contact_manager.add_contact(name, validation.valid_number(number), mail, category, country.title())
+        
+        if validation.valid_number(number) != False and validation.valid_number(number) != None:
+            number = validation.valid_number(number)
+            
+            if validation.valid_mail(mail) != False and validation.valid_mail(mail) != None:
+                mail = validation.valid_mail(mail=mail)
+                
+                if validation.valid_category(category) != False:
+                    category = validation.valid_category(category)
+
+                    if validation.valid_country(country) != False and validation.valid_country(country=country) != None:
+                        country = validation.valid_country(country=country)
+
+                        
+
+                        # Extract country code and country name
+                        extracted_info = contact_manager.extract_country(number, country)
+                        if extracted_info != False and extracted_info != "Mismatch Error":
+                            number = extracted_info[1]
+                            country = extracted_info[2]
+
+                            contact_manager.add_contact(name, number, mail, category, country)
+                    
+                        elif extracted_info == "Mismatch Error":
+                            print("Country code and Country name doesn't match...")
+                            resume_to_the_current_query(add, main_function=main)
+                    
+                        
+                        elif extracted_info == False:
+                            print("Country extraction failed. Check the Phone Number or Country Name ")
+                            resume_to_the_current_query(add, main_function=main)
+
+                        else:
+                            print("Unexcepted error occured, can't identify the error...")
+                            resume_to_the_current_query(add, main_function=main)
+
+                    elif validation.valid_country(country) == None:
+                        if "+" in number:
+                            extracted_info = contact_manager.extract_country(number, None)
+                            if extracted_info != False and extracted_info != "Mismatch Error":
+                                number = extracted_info[1]
+                                country = extracted_info[2]
+
+                                contact_manager.add_contact(name, number, mail, category, country)
+                        
+                            elif extracted_info == "Mismatch Error":
+                                print("Country code and Country name doesn't match...")
+                                resume_to_the_current_query(add, main_function=main)
+                        
+                            
+                            elif extracted_info == False:
+                                print("Country extraction failed. Check the Phone Number or Country Name ")
+                                resume_to_the_current_query(add, main_function=main)
+
+                            else:
+                                print("Unexcepted error occured, can't identify the error...")
+                                resume_to_the_current_query(add, main_function=main)
+
+                        else:
+                            print("The number doesn't have country code preifix and Country name is also not given ..."
+                                  "You have to enter atleast one of them...")
+                            resume_to_the_current_query(add, main_function=main)
+
+                            
+                        
                     else:
                         print("Country name Invalid...")
+                        resume_to_the_current_query(add, main_function=main)
                 else:
                     print("This group of category doesn't exist...")
+                    resume_to_the_current_query(add, main_function=main)
             else:
                 print("Problem with the Mail...")
-                resume_the_current_query = input("Resume the current query, Y/N: ")
-                if resume_the_current_query in ['yes', 'y', 'Y']:
-                    add()
-                else:
-                    main()
+                resume_to_the_current_query(add, main_function=main)
+
+        elif validation.valid_number(number) == None:
+            print("Number can't be None")
+            resume_to_the_current_query(add, main_function=main)
         else:
             print("Problem with the Number...")
-            resume_the_current_query = input("Resume the current query, Y/N: ")
-            if resume_the_current_query in ['yes', 'y', 'Y']:
-                add()
-            else:
-                main()
+            resume_to_the_current_query(add, main_function=main)
 
 def update():
     """
@@ -173,14 +225,16 @@ def update():
     search_key, update_term, new_term = take_update_input()
     if validation.valid_exist(search_key) != False:
         index_point = contact_manager.search_contact(validation.valid_exist(search_key))
-        contact_manager.update_contact(index_point, update_term, new_term)
+        if validation.valid_term(new_term) != False:
+
+            contact_manager.update_contact(index_point, update_term, validation.valid_term(new_term)[1])
+
+        else:
+            print("Problem with the new Term...")
+            resume_to_the_current_query(update, main)
     else:
         print("Contact with the given info doesn't exist...")
-        resume_to_the_current_query = input("Resume to the current query, Y/N: ")
-        if resume_to_the_current_query in ['yes', 'y', 'Y']:
-            update()
-        else:
-            main()
+        resume_to_the_current_query(current_function=update, main_function = main)
 
 def remove():
     """
@@ -201,11 +255,7 @@ def remove():
             main()
     else:
         print("Contact with the given info doesn't exist...")
-        resume_to_the_current_query = input("Resume to the current query, Y/N: ")
-        if resume_to_the_current_query in ['yes', 'y', 'Y']:
-            remove()
-        else:
-            main()
+        resume_to_the_current_query(remove, main_function=main)
 
 def search():
     """
@@ -240,6 +290,18 @@ def search_info():
             search_info()
         else:
             main()
+
+
+def resume_to_the_current_query(current_function, main_function):
+    user_input = input("Resume the current query, Y/N: ")
+    if user_input.lower() in ['yes', 'y']:
+        current_function()
+    elif user_input.lower() in ['no', 'n']:
+        main_function()
+    else:
+        print("Invalid Input..."
+              "You have to enter only Y or N...")
+        resume_to_the_current_query(current_function, main_function)
 
 def print_commands():
     """
