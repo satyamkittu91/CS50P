@@ -136,8 +136,9 @@ def add():
             if validation.valid_mail(mail) != False and validation.valid_mail(mail) != None:
                 mail = validation.valid_mail(mail=mail)
                 
-                if validation.valid_category(category) != False:
-                    category = validation.valid_category(category)
+                category = validation.valid_category(category)
+                if category != False and category != None and category != "New" and category != FileNotFoundError:
+                    
 
                     if validation.valid_country(country) != False and validation.valid_country(country=country) != None:
                         country = validation.valid_country(country=country)
@@ -197,9 +198,19 @@ def add():
                     else:
                         print("Country name Invalid...")
                         resume_to_the_current_query(add, main_function=main)
-                else:
+
+                elif category == "New":
                     print("This group of category doesn't exist...")
                     resume_to_the_current_query(add, main_function=main)
+
+                elif category == None:
+                    print("You must enter the category of the contact...")
+                    resume_to_the_current_query(add, main_function=main)
+
+                elif category == FileNotFoundError:
+                    print("Error Loading 'categories.txt' file, check your system..."
+                          "and than run the Program Again")
+                    sys.exit()
             else:
                 print("Problem with the Mail...")
                 resume_to_the_current_query(add, main_function=main)

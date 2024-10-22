@@ -1,6 +1,15 @@
 import re
 import pandas
 import pycountry
+import json
+import sys
+
+try:
+    with open(r"categories.txt", 'r', encoding='utf-8') as file:
+        cateogries = json.load(file)
+except json.JSONDecodeError as e:
+    print(f"Error loading 'categories.txt' file: {e}")
+    sys.exit()
 
 def valid_name(name):
     """
@@ -90,7 +99,7 @@ def valid_mail(mail):
     else:
         return False  # Nope, not a valid email address
 
-VALID_CATEGORIES = ['Friends', 'Work', 'Family', 'Acquaintances', 'Other', 'Test']
+
 
 def valid_category(category):
     """
@@ -108,8 +117,16 @@ def valid_category(category):
     >>> valid_category('friends')
     'Friends'
     """
-    if category.title() in VALID_CATEGORIES:  # Match category ignoring case
+    #categories = ['Friends', 'Work', 'Family', 'Acquaintances', 'Other', 'Test']
+
+
+    if category == "":
+        return None
+    if category.title() in cateogries:  # Match category ignoring case
         return category.title()  # Return a nice title-cased category
+    
+    elif category.title() not in cateogries:  # New category
+        return "New"
     else:
         return False  # That's not a valid category, sorry
 
