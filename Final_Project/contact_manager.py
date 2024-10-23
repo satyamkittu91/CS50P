@@ -5,6 +5,7 @@ from datetime import date
 import phonenumbers
 import json
 import sys
+import validation
 
 today = date.today()
 
@@ -157,6 +158,9 @@ def update_contact(index_point, update_term, new_term):
                 break
 
         df.loc[index_point, 'Country'] = f"{new_term.title()}({country_code})"
+
+    elif update_term.lower() == 'category':
+        df.loc[index_point, 'Category'] = new_term if new_term in validation.categories else validation.cateogries[0]
 
     df.loc[index_point, 'Last Update'] = today  # Set 'Last Update' to today
     df.to_csv(r'main.csv', index=False)  # Save changes back to the file

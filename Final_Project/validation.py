@@ -6,7 +6,7 @@ import sys
 
 try:
     with open(r"categories.txt", 'r', encoding='utf-8') as file:
-        cateogries = json.load(file)
+        categories = json.load(file)
 except json.JSONDecodeError as e:
     print(f"Error loading 'categories.txt' file: {e}")
     sys.exit()
@@ -121,11 +121,11 @@ def valid_category(category):
 
 
     if category == "":
-        return None
-    if category.title() in cateogries:  # Match category ignoring case
+        return categories[1]  # Return the default category
+    if category.title() in categories:  # Match category ignoring case
         return category.title()  # Return a nice title-cased category
     
-    elif category.title() not in cateogries:  # New category
+    elif category.title() not in categories:  # New category
         return "New"
     else:
         return False  # That's not a valid category, sorry

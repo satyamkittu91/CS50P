@@ -2,6 +2,7 @@ from contact import Contact
 import validation
 import contact_manager
 import phonenumbers
+import settings
 
 import sys
 
@@ -27,32 +28,35 @@ def main():
         command = input("-> ")
 
         # Checking the input command and directing the user accordingly
-        if command in ['command', 'c']:
+        if command.lower() in ['command', 'c']:
             print_commands()
 
-        elif command in ['help', 'h']:
+        elif command.lower() in ['help', 'h']:
             help()
 
-        elif command in ['exit', 'e', '--e', 'quit', 'q', '--q']:
+        elif command.lower() in ['exit', 'e', '--e', 'quit', 'q', '--q']:
             sys.exit("Exiting the Program....")
 
-        elif command == None:
+        elif command == "":
             print("Command can't be empty")
 
-        elif command in ['add', 'a']:
+        elif command.lower() in ['add', 'a']:
             add()
 
-        elif command in ['update', 'u']:
+        elif command.lower() in ['update', 'u']:
             update()
         
-        elif command in ['remove', 'r']:
+        elif command.lower() in ['remove', 'r']:
             remove()
 
-        elif command in ['search', 's']:
+        elif command.lower() in ['search', 's']:
             search()
 
-        elif command in ['search_info', 'si']:
+        elif command.lower() in ['search_info', 'si']:
             search_info()
+
+        elif command.lower() in ['default category', 'dc']:
+            setting_default_category()
 
 def take_add_input():
     """
@@ -117,7 +121,7 @@ def add():
     Example:
     >>> add()
     """
-    name, number, mail, category, country = take_add_input()
+    name, number, mail, categori, country = take_add_input()
 
     if validation.valid_name(name) == None:
         print("Name can't be None")
@@ -136,7 +140,7 @@ def add():
             if validation.valid_mail(mail) != False and validation.valid_mail(mail) != None:
                 mail = validation.valid_mail(mail=mail)
                 
-                category = validation.valid_category(category)
+                category = validation.valid_category(categori)
                 if category != False and category != None and category != "New" and category != FileNotFoundError:
                     
 
@@ -201,7 +205,18 @@ def add():
 
                 elif category == "New":
                     print("This group of category doesn't exist...")
-                    resume_to_the_current_query(add, main_function=main)
+                    create_new_y_or_n = input("Create a New Category, Y/N: ")
+                    if create_new_y_or_n.lower() in ['yes', 'y']:
+                        if settings.create_new_category(categori.title()) == True:
+                            print("New Category Created, Successfully")
+                            resume_to_the_current_query(add, main_function=main)
+                        else:
+                            print("Error while creating new category...")
+                            resume_to_the_current_query(add, main_function=main)
+
+                    if create_new_y_or_n.lower() in ['no', 'n']:
+                        print("You have to enter the category of the contact...")
+                        resume_to_the_current_query(add, main_function=main)
 
                 elif category == None:
                     print("You must enter the category of the contact...")
@@ -302,6 +317,24 @@ def search_info():
         else:
             main()
 
+
+def setting_default_category():
+    default_category = input("Set this category to default: ")
+    category = validation.valid_category(default_category)
+    if category != False and category != None and category != "New":
+        if settings.set_default_category(category) == False:
+            print("Error while setting default category...")
+
+        else:
+            print(f"{category} set as default category successfully...")
+
+    elif category == "":
+        print("category can't be none")
+        resume_to_the_current_query(setting_default_category, main)
+
+    else:
+        print("Category doesn't exist...")
+        resume_to_the_current_query(setting_default_category, main)
 
 def resume_to_the_current_query(current_function, main_function):
     user_input = input("Resume the current query, Y/N: ")
