@@ -3,6 +3,8 @@ import pandas
 import pycountry
 import json
 import sys
+import rapidfuzz
+import contact_manager
 
 try:
     with open(r"categories.txt", 'r', encoding='utf-8') as file:
@@ -101,7 +103,7 @@ def valid_mail(mail):
 
 
 
-def valid_category(category):
+def valid_category(category, categories=categories):
     """
     Validates if a category exists within the predefined list of categories. 
     Categories are title-cased before comparison.
@@ -122,13 +124,19 @@ def valid_category(category):
 
     if category == "":
         return categories[1]  # Return the default category
-    if category.title() in categories:  # Match category ignoring case
-        return category.title()  # Return a nice title-cased category
     
-    elif category.title() not in categories:  # New category
-        return "New"
-    else:
-        return False  # That's not a valid category, sorry
+    category = category.title()
+    if category in categories:  # Match category ignoring case
+        return category  # Return a nice title-cased category
+    
+
+    match_category = rapidfuzz.process.extract(category, categories, limit=1)
+    if match_category[0][1] >= 75:  # If the category is close enough to an existing category
+        return match_category[0][0]
+    
+    # New category
+    return "New"
+
 
 def valid_country(country):
     """
@@ -146,15 +154,24 @@ def valid_country(country):
     >>> valid_country('IN')
     'India'
     """
-    if not country:  # Empty country? No validation needed then
+    if country == "":  # Empty country? No validation needed then
         return None
-    else:
+    
+    elif country:
         try:
             # Look up the country using pycountry
-            country_data = pycountry.countries.lookup(country)
+            country_data = pycountry.countries.lookup(country.title())
             return country_data.name.title()  # Return the official name of the country
-        except LookupError:
-            return False  # Oops, couldn't find that country
+        except LookupError:  # Oops, couldn't find that country
+
+            country_list = list(contact_manager.country_dict.values())
+            match_country = rapidfuzz.process.extract(country.title(), country_list, limit=1)
+            if match_country[0][1] >= 75:  # If the country is close enough to an existing country
+                return match_country[0][0]
+            else:
+                return False  # That's not a valid country, sorry
+
+
 
 def valid_exist(search_key):
     """

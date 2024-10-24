@@ -166,6 +166,7 @@ def add():
                             country = extracted_info[2]
 
                             contact_manager.add_contact(name, number, mail, category, country)
+                            print("New Contact added successfully...\n")
                     
                         elif extracted_info == "Mismatch Error":
                             print("Country code and Country name doesn't match...")
@@ -188,6 +189,7 @@ def add():
                                 country = extracted_info[2]
 
                                 contact_manager.add_contact(name, number, mail, category, country)
+                                print("New Contact added successfully")
                         
                             elif extracted_info == "Mismatch Error":
                                 print("Country code and Country name doesn't match...")
@@ -232,10 +234,7 @@ def add():
                     print("You must enter the category of the contact...")
                     resume_to_the_current_query(add, main_function=main)
 
-                elif category == FileNotFoundError:
-                    print("Error Loading 'categories.txt' file, check your system..."
-                          "and than run the Program Again")
-                    sys.exit()
+
             else:
                 print("Problem with the Mail...")
                 resume_to_the_current_query(add, main_function=main)
