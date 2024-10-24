@@ -70,12 +70,16 @@ def take_add_input():
     Name: John Doe
     """
     name = input("Name: ")
+    exit_from_current_query(name)
     number = input("Number: ")
+    exit_from_current_query(number)
     mail = input("Mail: ")
+    exit_from_current_query(mail)
     category = input("Category: ")
+    exit_from_current_query(category)
     print("Optional, if the number have country code")
     country = input("Country: ")
-
+    exit_from_current_query(country)
     return name, number, mail, category, country
 
 def take_update_input():
@@ -91,8 +95,13 @@ def take_update_input():
     Search for an existing contact: John
     """
     search_key = input("Search for an existing contact: ")
+    exit_from_current_query(search_key)
+    
     update_term = input("The term to update: ")
+    exit_from_current_query(update_term)
+    
     new_term = input("New Term: ")
+    exit_from_current_query(new_term)
 
     return search_key, update_term, new_term
 
@@ -108,6 +117,7 @@ def take_remove_input():
     Search Key: John
     """
     search_key = input("Search Key: ")
+    exit_from_current_query(search_key)
     
     return search_key
 
@@ -305,6 +315,7 @@ def search_info():
     >>> search_info()
     """
     search_key = input("Search Key: ")
+    exit_from_current_query(search_key)
     if validation.valid_exist(search_key) != False:
         index_point = contact_manager.search_contact(validation.valid_exist(search_key))
         specific_info = input("Specific info of the contact: ")
@@ -320,6 +331,7 @@ def search_info():
 
 def setting_default_category():
     default_category = input("Set this category to default: ")
+    exit_from_current_query(default_category)
     category = validation.valid_category(default_category)
     if category != False and category != None and category != "New":
         if settings.set_default_category(category) == False:
@@ -346,6 +358,14 @@ def resume_to_the_current_query(current_function, main_function):
         print("Invalid Input..."
               "You have to enter only Y or N...")
         resume_to_the_current_query(current_function, main_function)
+
+def exit_from_current_query(vari):
+    if vari.lower() in ["exit", "e", "--e", "quit", "q", "--q"]:
+        sys.exit()
+    elif vari.lower() in ["Cancel", "c", "--c"]:
+        main()
+    else:
+        None
 
 def print_commands():
     """
