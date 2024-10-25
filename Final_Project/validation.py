@@ -213,16 +213,43 @@ def valid_exist(search_key):
 
 def valid_term(term):
     
-    if valid_name(term) != False:
+
+    if valid_category(term) != False:
+        return ["category_type", valid_category(term)]
+    elif valid_country(term) != False:
+        return ["country_type", valid_country(term)]
+    elif valid_name(term) != False:
         return ["name_type", valid_name(term)]
     elif valid_number(term) != False:    
         return ["number_type", valid_number(term)]
     elif valid_mail(term) != False:
         return ["mail_type", valid_mail(term)]
-    elif valid_category(term) != False:
-        return ["category_type", valid_category(term)]
-    elif valid_country(term) != False:
-        return ["country_type", valid_country(term)]
+
     else:
         print("Invalid Term")
         return False
+    
+
+def valid_duplicate_name(name):
+    df = pandas.read_csv(r'main.csv')
+    name_list = df["Name"].astype(str).tolist()
+    if name in name_list:
+        return False
+    else:
+        return True
+    
+def valid_duplicate_number(number):
+    df = pandas.read_csv(r'main.csv')
+    number_list = df["Number"].astype(str).tolist()
+    if number in number_list:
+        return False
+    else:
+        return True
+    
+def valid_duplicate_mail(mail):
+    df = pandas.read_csv(r'main.csv')
+    mail_list = df["Mail"].str.lower().tolist()
+    if mail in mail_list:
+        return False
+    else:
+        return True
