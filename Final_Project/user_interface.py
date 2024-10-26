@@ -165,19 +165,15 @@ def add():
                             number = extracted_info[1]
                             country = extracted_info[2]
 
-                            if validation.valid_duplicate_name(name=name):
-                                if validation.valid_duplicate_number(number=number):
-                                    if validation.valid_duplicate_mail(mail=mail):
-                                        contact_manager.add_contact(name, number, mail, category, country)
-                                        print("New Contact added successfully")
-                                    else:
-                                        print("A contact with the same mail already exists")
-                                        resume_to_the_current_query(add, main)
+                            if validation.valid_duplicate_number(number=number):
+                                if validation.valid_duplicate_mail(mail=mail):
+                                    contact_manager.add_contact(name, number, mail, category, country)
+                                    print("New Contact added successfully")
                                 else:
-                                    print("A contact with the same number already exists")
+                                    print("A contact with the same mail already exists")
                                     resume_to_the_current_query(add, main)
                             else:
-                                print("A contact with the same name already exists")
+                                print("A contact with the same number already exists")
                                 resume_to_the_current_query(add, main)
                     
                         elif extracted_info == "Mismatch Error":
@@ -200,19 +196,15 @@ def add():
                                 number = extracted_info[1]
                                 country = extracted_info[2]
 
-                                if validation.valid_duplicate_name(name=name) == True:
-                                    if validation.valid_duplicate_number(number=number) == True:
-                                        if validation.valid_duplicate_mail(mail=mail) == True:
-                                            contact_manager.add_contact(name, number, mail, category, country)
-                                            print("New Contact added successfully")
-                                        else:
-                                            print("A contact with the same mail already exists")
-                                            resume_to_the_current_query(add, main)
+                                if validation.valid_duplicate_number(number=number) == True:
+                                    if validation.valid_duplicate_mail(mail=mail) == True:
+                                        contact_manager.add_contact(name, number, mail, category, country)
+                                        print("New Contact added successfully")
                                     else:
-                                        print("A contact with the same number already exists")
+                                        print("A contact with the same mail already exists")
                                         resume_to_the_current_query(add, main)
                                 else:
-                                    print("A contact with the same name already exists")
+                                    print("A contact with the same number already exists")
                                     resume_to_the_current_query(add, main)
                         
                             elif extracted_info == "Mismatch Error":
@@ -285,8 +277,15 @@ def update():
     if validation.valid_exist(search_key) != False:
         index_point = contact_manager.search_contact(validation.valid_exist(search_key))
         if validation.valid_term(new_term) != False:
-
-            contact_manager.update_contact(index_point, update_term, validation.valid_term(new_term)[1])
+            if validation.valid_duplicate_number(number=new_term) == True:
+                if validation.valid_duplicate_mail(mail=new_term) == True:
+                    contact_manager.update_contact(index_point, update_term, validation.valid_term(new_term)[1])
+                else:
+                    print("A contact with the same mail already exists")
+                    resume_to_the_current_query(update, main)
+            else:
+                print("A contact with the same number already exists")
+                resume_to_the_current_query(update, main)
 
         else:
             print("Problem with the new Term...")

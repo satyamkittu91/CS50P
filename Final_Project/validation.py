@@ -123,7 +123,7 @@ def valid_category(category, categories=categories):
 
 
     if category == "":
-        return categories[1]  # Return the default category
+        return categories[0]  # Return the default category
     
     category = category.title()
     if category in categories:  # Match category ignoring case
@@ -230,14 +230,7 @@ def valid_term(term):
         return False
     
 
-def valid_duplicate_name(name):
-    df = pandas.read_csv(r'main.csv')
-    name_list = df["Name"].astype(str).tolist()
-    if name in name_list:
-        return False
-    else:
-        return True
-    
+
 def valid_duplicate_number(number):
     df = pandas.read_csv(r'main.csv')
     number_list = df["Number"].astype(str).tolist()
