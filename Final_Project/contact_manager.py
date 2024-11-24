@@ -244,9 +244,28 @@ def search_info_contact(index_point, specific_info):
 
 def extract_country(number, country):
     """
-    Extracts the country code from a contact number and returns the country name, the original number and 
-    country code in a list form.
+    Extracts and validates country information from phone numbers.
+    
+    This function handles multiple scenarios:
+    1. Numbers with country code (+XX): Extracts and validates code
+    2. Numbers without code but with country name: Validates country
+    3. Numbers with both: Ensures they match
+    
+    Parameters:
+        number (str): Phone number, optionally with country code
+        country (str): Country name or None
+        
+    Returns:
+        list: [country_code, number_without_prefix, formatted_country_string]
+        str: "Mismatch Error" if country code doesn't match country name
+        False: If validation fails
+        
+    Example:
+        >>> extract_country("+1234567890", "United States")
+        ["+1", "234567890", "United States(+1)"]
     """
+
+
     try:        
         if '+' in number:
             no = phonenumbers.parse(number, None)

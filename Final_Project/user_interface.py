@@ -8,17 +8,38 @@ import sys
 
 def main():
     """
-    The main function that starts the Contacts Manager Program.
-    Displays helpful instructions and waits for user commands 
-    like 'add', 'update', 'remove', and 'search'. Type 'exit' to quit the program.
+    The main entry point for the PeoplePal Contacts Manager Program.
     
-    This is where the contact magic happens!
+    This function initializes the program interface and provides an interactive
+    command-line interface for managing contacts. Users can perform various
+    operations through simple commands:
+    
+    Commands:
+    - add/a: Add a new contact with details like name, number, email, etc.
+    - update/u: Modify existing contact information
+    - remove/r: Delete a contact from the database
+    - search/s: Find contacts using various search criteria
+    - search_info/si: Look up specific details about a contact
+    - help/h: Display detailed program instructions
+    - commands/c: Show available commands
+    - exit/e: Close the program
+    
+    The program supports features like:
+    - International phone numbers with country code validation
+    - Contact categorization (Work, Family, etc.)
+    - Email validation
+    - Fuzzy matching for category and country names
+    - Default category settings
     
     Example:
     >>> main()
     *** Contacts Manager Program ***
     Type 'help/h' for instructions
+    Type 'commands/c' for the list of commands
+    Type 'exit/e' to quit the program
     """
+
+
     print('\n*** Contacts Manager Program ***')
     print("\nType 'help/h' for instructions\n"
           "Type 'commands/c' for the list of commands\n"
@@ -60,15 +81,32 @@ def main():
 
 def take_add_input():
     """
-    Prompts the user for contact details like name, number, mail, category, and country.
+    Prompts the user for comprehensive contact information in an interactive way.
+    
+    This function collects all necessary details for creating a new contact:
+    - Name: Supports both "First Last" and "Last, First" formats
+    - Number: Accepts international formats with country codes
+    - Mail: Validates email format
+    - Category: Supports fuzzy matching with existing categories
+    - Country: Optional for local numbers, required for international
+    
+    The function includes built-in exit points using 'exit/e' or 'cancel/c'
+    at any input stage.
     
     Returns:
-    tuple: Contains name, number, mail, category, and country entered by the user.
-    
+        tuple: (name, number, mail, category, country) containing validated input
+        
     Example:
-    >>> take_add_input()
-    Name: John Doe
+        >>> name, number, mail, category, country = take_add_input()
+        Name: John Doe
+        Number: +1234567890
+        Mail: john@example.com
+        Category: Work
+        Country: USA
     """
+
+
+
     name = input("Name: ")
     exit_from_current_query(name)
     number = input("Number: ")
@@ -84,16 +122,29 @@ def take_add_input():
 
 def take_update_input():
     """
-    Asks the user for inputs needed to update a contact: 
-    a search key, the term to update, and the new value.
-
+    Collects information needed to update an existing contact's details.
+    
+    This function guides the user through the update process by:
+    1. Getting a search key to find the contact
+    2. Specifying which field to update (name, number, mail, etc.)
+    3. Providing the new value for that field
+    
+    All inputs support the exit/cancel commands for user convenience.
+    
     Returns:
-    tuple: The search key, the field to update, and the new value.
-
+        tuple: (search_key, update_term, new_term)
+            - search_key: Term to find the contact
+            - update_term: Field to be updated
+            - new_term: New value for the field
+            
     Example:
-    >>> take_update_input()
-    Search for an existing contact: John
+        >>> search_key, update_term, new_term = take_update_input()
+        Search for an existing contact: John
+        The term to update: number
+        New Term: +1987654321
     """
+
+
     search_key = input("Search for an existing contact: ")
     exit_from_current_query(search_key)
     
@@ -123,14 +174,34 @@ def take_remove_input():
 
 def add():
     """
-    Handles the process of adding a new contact. 
-    Takes inputs from the user, validates them, and adds the contact if all inputs are valid.
+    Handles the complete contact addition process with comprehensive validation.
     
-    If a validation fails, it gives the user an option to retry or go back to the main menu.
+    This function:
+    1. Collects contact information through take_add_input()
+    2. Validates all inputs:
+        - Name format and structure
+        - Phone number format and uniqueness
+        - Email format and uniqueness
+        - Category existence/creation
+        - Country code validation
+    3. Extracts and validates country information from phone numbers
+    4. Handles category creation for new categories
+    5. Provides error handling and retry options
+    
+    The function maintains data integrity by checking for duplicates
+    and ensures all international numbers match their country codes.
     
     Example:
-    >>> add()
+        >>> add()
+        Name: John Doe
+        Number: +1234567890
+        Mail: john@example.com
+        Category: Work
+        Country: USA
+        New Contact added successfully
     """
+
+
     name, number, mail, categori, country = take_add_input()
 
     if validation.valid_name(name) == None:
@@ -264,15 +335,26 @@ def add():
 
 def update():
     """
-    Handles updating an existing contact. 
-    The user is prompted to search for the contact they want to update, 
-    select the field to update, and provide the new value.
+    Manages the complete contact update workflow with validation.
     
-    If no matching contact is found, the user can retry or return to the main menu.
+    Features:
+    - Fuzzy searching for finding contacts
+    - Field-specific validation for updates
+    - Automatic country code updating when phone numbers change
+    - Duplicate checking for emails and phone numbers
+    - Last update timestamp maintenance
+    
+    The function prevents invalid updates and maintains data consistency
+    by validating all changes before committing them.
     
     Example:
-    >>> update()
+        >>> update()
+        Search for an existing contact: John
+        The term to update: number
+        New Term: +1987654321
+        [Shows old and new contact details]
     """
+
     search_key, update_term, new_term = take_update_input()
     if validation.valid_exist(search_key) != False:
         index_point = contact_manager.search_contact(validation.valid_exist(search_key))
@@ -391,76 +473,90 @@ def exit_from_current_query(vari):
 
 def print_commands():
     """
-    Prints the available commands for the user to interact with the system.
-    
-    Example:
-    >>> print_commands()
-    Commands:
-    add/a : To add a new Contact to Database.
+    Displays the list of available commands and their descriptions.
+    This function provides a comprehensive guide to interacting with the contact manager.
     """
     commands = {
-        'add/a': 'To add a new Contact to Database.',
-        'update/u': 'To update an existing Contact in Database.',
-        'remove/r': 'To remove an existing Contact in Database.',
-        'search/s': 'To search for an existing Contact in Database.',
-        'search_info/si': 'To search for a specific info about an existing contact.',
-        'exit/e': 'To EXIT from the program.'
+        "1": "Add a new contact",
+        "2": "Search for a contact",
+        "3": "Update an existing contact",
+        "4": "Remove a contact",
+        "5": "View all contacts",
+        "6": "Create a new category",
+        "7": "Set a default category",
+        "8": "Exit the program"
     }
-    print("Commands:")
-    for key, value in commands.items():
-        print(f"{key} : {value}")
 
-def help():
+    print("\nAvailable Commands:")
+    for key, description in commands.items():
+        print(f"  {key}. {description}")
+
+    print("\nFor detailed help on a specific command, use the 'help' function.\n")
+
+
+def help(command=None):
     """
-    Provides detailed help and instructions on how to use the Contacts Manager Program.
-    This function explains each command and its purpose, guiding the user on how to manage their contacts efficiently.
+    Provides detailed help for a specific command or general guidance.
+    
+    Parameters:
+        command (str): The specific command to get help for. If None, provides general help.
     """
-    help_text = """
-    *** Welcome to the Contacts Manager Program Help Center! ***
-    
-    This program helps you organize and manage your contacts with ease. 
-    Below is a quick guide to help you get started:
+    help_text = {
+        "1": """
+        Add a New Contact:
+        - Adds a contact to the system with details like Name, Number, Email, Category, and Country.
+        - Example:
+          Enter 'Name': John Doe
+          Enter 'Number': +1234567890
+          Enter 'Mail': john.doe@example.com
+          Enter 'Category': Work
+          Enter 'Country': USA
+        """,
+        "2": """
+        Search for a Contact:
+        - Finds contacts by name or other details.
+        - Displays matching contacts and allows selecting one for further actions.
+        - Example: Enter 'John' to find all contacts containing 'John'.
+        """,
+        "3": """
+        Update an Existing Contact:
+        - Allows updating a specific field of a contact (Name, Number, Mail, Category, or Country).
+        - Example: Update John's number to '+9876543210'.
+        """,
+        "4": """
+        Remove a Contact:
+        - Deletes a contact from the system.
+        - Example: Select a contact index to remove it permanently.
+        """,
+        "5": """
+        View All Contacts:
+        - Displays all saved contacts in a tabular format.
+        - Example: Use this command to review your contact list.
+        """,
+        "6": """
+        Create a New Category:
+        - Adds a new category to the system.
+        - Example: Create a 'Colleagues' category for work-related contacts.
+        """,
+        "7": """
+        Set a Default Category:
+        - Sets a specific category as the default for new contacts.
+        - Example: Set 'Family' as the default category.
+        """,
+        "8": """
+        Exit the Program:
+        - Safely exits the application and saves all changes.
+        """
+    }
 
-    Basic Commands:
-    ---------------
-    1. 'add' or 'a': 
-       - Use this command to add a new contact. You’ll be asked to provide the contact's Name, Number, Email, Category (like Work, Family, etc.), and Country. 
-       - The contact will be validated and saved if all inputs are correct.
-    
-    2. 'update' or 'u': 
-       - Use this command to update any existing contact. 
-       - You'll be prompted to search for the contact first, choose what information you want to update (like name, number, etc.), and provide the new value.
-    
-    3. 'remove' or 'r': 
-       - Use this command to remove a contact from your database. 
-       - After confirming, the selected contact will be permanently deleted.
-
-    4. 'search' or 's': 
-       - Use this command to search for a contact by their name, number, or other details. 
-       - It will display the matching contacts for you to select from.
-    
-    5. 'search_info' or 'si': 
-       - If you want specific information about a contact (like just their email or category), use this command. 
-       - You'll search for the contact first, then choose which specific detail you want to see.
-
-    6. 'commands' or 'c': 
-       - This command shows the list of all available commands, in case you need a quick reference.
-
-    7. 'exit' or 'e': 
-       - Type this to exit the program. All your changes will be saved before exiting.
-
-    Extra Tips:
-    -----------
-    - The program will always validate your input (name, number, email, etc.), so don’t worry about making small mistakes! 
-    - If you ever run into trouble or an input doesn't seem to work, the program will guide you back to the main menu or allow you to retry the process.
-    - Feel free to explore the commands, and don’t hesitate to add, update, or remove contacts as needed. It's your personal contact organizer!
-
-    We hope you find this program helpful in managing your contacts. 
-    If you ever need a refresher, just type 'help' or 'h' at any time!
-
-    Enjoy managing your contacts!
-    """
-    print(help_text)
+    if command and command in help_text:
+        print(f"\nHelp for Command {command}:")
+        print(help_text[command])
+    else:
+        print("\nGeneral Help:")
+        print("This contact management system allows you to manage and organize your contacts efficiently.")
+        print("Use the 'print_commands' function to see all available commands.")
+        print("For help with a specific command, use 'help(<command_number>)'.")
 
 
 if __name__ == "__main__":

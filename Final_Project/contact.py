@@ -1,6 +1,41 @@
 
 
 class Contact():
+    """
+    Represents a contact in the PeoplePal system with full contact details.
+    
+    This class encapsulates all contact information with proper validation
+    and formatting. It includes properties for safe access to private fields
+    and methods for string representation and dictionary conversion.
+    
+    Attributes:
+        name (str): Contact's full name
+        _number (str): Phone number (private)
+        _mail (str): Email address (private)
+        category (str): Contact category (e.g., Work, Family)
+        last_update (date): Last modification date
+        country (str): Country name with code
+        
+    Properties:
+        number: Getter/setter for phone number
+        mail: Getter/setter for email
+        
+    Methods:
+        __str__: Returns formatted contact information
+        to_dict: Converts contact to dictionary format
+        
+    Example:
+        >>> contact = Contact("John Doe", "+1234567890", 
+                            "john@example.com", "USA", 
+                            "2024-01-01", "Work")
+        >>> print(contact)
+        Contact Information
+        Name: John Doe
+        Number: +1234567890
+        ...
+    """
+
+
     def __init__(self, name, number, mail, country, last_update, category='Uncategorized'):
         """
         Initialises a Contact object

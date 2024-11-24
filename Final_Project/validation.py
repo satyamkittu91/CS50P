@@ -15,23 +15,29 @@ except json.JSONDecodeError as e:
 
 def valid_name(name):
     """
-    Validate and format a name. If the name starts with an alphabetic character, 
-    it processes the name. If the name contains a comma (like 'Last, First'), 
-    it flips it to 'First Last' format and capitalizes both. Otherwise, 
-    it returns the title-cased version of the name. 
-
+    Validates and formats contact names with support for multiple formats.
+    
+    Features:
+    - Supports "First Last" and "Last, First" formats
+    - Proper capitalization of name parts
+    - Whitespace normalization
+    - Empty/None checking
+    
     Parameters:
-    name (str): The name to be validated and formatted.
-
+        name (str): Name to validate and format
+        
     Returns:
-    str: The formatted name if valid.
-    None: If the name is None or empty.
-    False: If the name doesn't start with a letter.
-
+        str: Formatted name if valid
+        None: If name is empty/None
+        False: If name format is invalid
+        
     Example:
-    >>> valid_name('Doe, John')
-    'John Doe'
+        >>> valid_name("doe, john")
+        "John Doe"
+        >>> valid_name("mary jane smith")
+        "Mary Jane Smith"
     """
+
     if name == None or name == '':  # Check if the name is empty or None
         return None
     if name[0].isalpha():  # Make sure the name starts with a letter
