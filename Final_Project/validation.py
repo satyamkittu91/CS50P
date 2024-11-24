@@ -41,7 +41,7 @@ def valid_name(name):
     if name == None or name == '':  # Check if the name is empty or None
         return None
     if name[0].isalpha():  # Make sure the name starts with a letter
-        if ',' in name:
+        if ', ' in name:
             last, first = name.split(', ')
             name = f"{first.strip()} {last.strip()}"  # Flip 'Last, First' to 'First Last'
             return name.title()  # Return a pretty version with capitalized words
@@ -220,16 +220,17 @@ def valid_exist(search_key):
 def valid_term(term):
     
 
-    if valid_category(term) != False:
-        return ["category_type", valid_category(term)]
+    if valid_name(term) != False:
+        return ["name_type", valid_name(term)]
     elif valid_country(term) != False:
         return ["country_type", valid_country(term)]
-    elif valid_name(term) != False:
-        return ["name_type", valid_name(term)]
+
     elif valid_number(term) != False:    
         return ["number_type", valid_number(term)]
     elif valid_mail(term) != False:
         return ["mail_type", valid_mail(term)]
+    elif valid_category(term) != False:
+        return ["category_type", valid_category(term)]
 
     else:
         print("Invalid Term")

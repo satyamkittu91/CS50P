@@ -1,4 +1,5 @@
-# Contact Manager Project
+# PeoplePal
+#### Video Demo: https://youtu.be/86_tua3eVu8?si=sII-IQMFVM9juknh
 
 ## What's This All About?
 

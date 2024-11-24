@@ -49,7 +49,7 @@ def main():
         command = input("-> ")
 
         # Checking the input command and directing the user accordingly
-        if command.lower() in ['command', 'c']:
+        if command.lower() in ['commands', 'c']:
             print_commands()
 
         elif command.lower() in ['help', 'h']:
@@ -473,90 +473,59 @@ def exit_from_current_query(vari):
 
 def print_commands():
     """
-    Displays the list of available commands and their descriptions.
-    This function provides a comprehensive guide to interacting with the contact manager.
+    Displays a descriptive list of all available commands in the program.
     """
-    commands = {
-        "1": "Add a new contact",
-        "2": "Search for a contact",
-        "3": "Update an existing contact",
-        "4": "Remove a contact",
-        "5": "View all contacts",
-        "6": "Create a new category",
-        "7": "Set a default category",
-        "8": "Exit the program"
-    }
-
-    print("\nAvailable Commands:")
-    for key, description in commands.items():
-        print(f"  {key}. {description}")
-
-    print("\nFor detailed help on a specific command, use the 'help' function.\n")
+    print("\n--- Commands ---")
+    print("Here are the available commands you can use:")
+    print("-" * 40)
+    print("1. Add a Contact:          Add a new contact with complete details.")
+    print("2. Update a Contact:       Update the details of an existing contact.")
+    print("3. Delete a Contact:       Remove a contact from the list.")
+    print("4. Search Contacts:        Search for contacts by name, number, or email.")
+    print("5. Show All Contacts:      Display all saved contacts in a list.")
+    print("6. Create Category:        Add a new category for better contact organization.")
+    print("7. Set Default Category:   Set a default category for future contacts.")
+    print("8. Show Commands:          Display this list of commands.")
+    print("-" * 40)
+    print("Type the name of a command to use it.")
 
 
-def help(command=None):
+def help():
     """
-    Provides detailed help for a specific command or general guidance.
+    Displays a descriptive help menu with all available commands and their purposes.
+    """
+    print("\n--- Help Menu ---")
+    print("This program helps you manage your contacts efficiently.")
+    print("Below is a list of commands you can use, along with their descriptions:\n")
     
-    Parameters:
-        command (str): The specific command to get help for. If None, provides general help.
-    """
-    help_text = {
-        "1": """
-        Add a New Contact:
-        - Adds a contact to the system with details like Name, Number, Email, Category, and Country.
-        - Example:
-          Enter 'Name': John Doe
-          Enter 'Number': +1234567890
-          Enter 'Mail': john.doe@example.com
-          Enter 'Category': Work
-          Enter 'Country': USA
-        """,
-        "2": """
-        Search for a Contact:
-        - Finds contacts by name or other details.
-        - Displays matching contacts and allows selecting one for further actions.
-        - Example: Enter 'John' to find all contacts containing 'John'.
-        """,
-        "3": """
-        Update an Existing Contact:
-        - Allows updating a specific field of a contact (Name, Number, Mail, Category, or Country).
-        - Example: Update John's number to '+9876543210'.
-        """,
-        "4": """
-        Remove a Contact:
-        - Deletes a contact from the system.
-        - Example: Select a contact index to remove it permanently.
-        """,
-        "5": """
-        View All Contacts:
-        - Displays all saved contacts in a tabular format.
-        - Example: Use this command to review your contact list.
-        """,
-        "6": """
-        Create a New Category:
-        - Adds a new category to the system.
-        - Example: Create a 'Colleagues' category for work-related contacts.
-        """,
-        "7": """
-        Set a Default Category:
-        - Sets a specific category as the default for new contacts.
-        - Example: Set 'Family' as the default category.
-        """,
-        "8": """
-        Exit the Program:
-        - Safely exits the application and saves all changes.
-        """
-    }
+    print("1. Add a Contact:")
+    print("   Use this to add a new contact to your list. You'll provide details like name, phone number, email, category, and country.")
+    
+    print("\n2. Update a Contact:")
+    print("   Modify the details of an existing contact. Choose which field to update, such as name, phone number, or email.")
+    
+    print("\n3. Delete a Contact:")
+    print("   Remove an unwanted or outdated contact from your list. The program will confirm before deleting.")
+    
+    print("\n4. Search Contacts:")
+    print("   Find a specific contact by providing keywords such as name, phone number, or email.")
+    
+    print("\n5. Show All Contacts:")
+    print("   Displays the complete list of your saved contacts in a clear and organized format.")
+    
+    print("\n6. Create Category:")
+    print("   Add a new category to organize your contacts (e.g., 'Friends', 'Family', or 'Work').")
+    
+    print("\n7. Set Default Category:")
+    print("   Set a category as the default for new contacts. This helps keep your contacts categorized automatically.")
+    
+    print("\n8. Show Commands:")
+    print("   Quickly displays all the available commands in the program.")
+    
+    print("\nTo use a command, simply type it when prompted. If you have any trouble, refer back to this help menu.")
+    print("-" * 40)
 
-    if command and command in help_text:
-        print(f"\nHelp for Command {command}:")
-        print(help_text[command])
-    else:
-        print("\nGeneral Help:")
-        print("This contact management system allows you to manage and organize your contacts efficiently.")
-        print("Use the 'print_commands' function to see all available commands.")
-        print("For help with a specific command, use 'help(<command_number>)'.")
+
 
 
 if __name__ == "__main__":
