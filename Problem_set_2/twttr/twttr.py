@@ -1,13 +1,15 @@
-full_word = input("Input: ")
 
-short_form = []
+def main():
+    full_word = input("Input: ")
+    print(shorten(full_word))
 
-for char in full_word:
-    if char in "aeiou":
-        None
-    else:
-        short_form.append(char)
 
-print("Output: ", end="")
-for char in short_form:
-    print(char, end="")
+def shorten(word):
+    for char in word:
+        if char in "aeiouAEIOU":
+            word = word.replace(char, '')
+    return word
+
+if __name__ == "__main__":
+    main()
+

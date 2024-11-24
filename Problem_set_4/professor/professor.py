@@ -35,7 +35,7 @@ def get_level():
         except ValueError:
             pass
     return level
-    
+
 def generate_integer(level):
     if level == 1:
         x = random.randint(0,9)
@@ -47,7 +47,7 @@ def generate_integer(level):
         x = random.randint(100, 999)
         y = random.randint(100, 999)
     return x,y
-                        
+
 
 if __name__ == "__main__":
     main()

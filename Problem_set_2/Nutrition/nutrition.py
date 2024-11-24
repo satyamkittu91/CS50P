@@ -7,14 +7,10 @@ fruits = {"apple": 130, "avocado": 50, "banana": 110, "cantaloupe": 50, "grapefr
 def main():
     # takes user input
     chosen_fruit = input("Item: ")
-    print(check_calories(chosen_fruit))
-
-
-def check_calories(u):
     # finds the calorie of the input
     for key,value in fruits.items():
-        if key == u.lower():
-            return f'calories: {value}'
+        if key == chosen_fruit.lower():
+            print(f'calories: {value}')
 
 
 if __name__ == "__main__":

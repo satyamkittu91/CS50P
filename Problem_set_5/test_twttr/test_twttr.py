@@ -16,3 +16,6 @@ def test_vowels():
 def test_capital():
     assert shorten("APPLE") == 'PPL'
     assert shorten("BANANA") == 'BNN'
+
+def test_punctuation():
+    assert shorten("Hello, World!") == "Hll, Wrld!"

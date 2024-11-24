@@ -1,23 +1,24 @@
 def main():
     time = input("What time is it: ").strip()
-    convert(time)
+
+    time = str(convert(time)).split(".")
+    if time[0] == "7":
+        print("breakfast time")
+    elif time[0] == "8":
+        print("breakfast time")
+    elif time[0] == "12":
+        print("lunch time")
+    elif time[0] == "13":
+        print("lunch time")
+    elif time[0] == "18":
+        print("dinner time")
+    elif time[0] == "19":
+        print("dinner time")
 
 def convert(time):
     hour, minute = time.split(":")
-    if hour == "7":
-        print("breakfast time")
-    elif hour == "8" and minute == "00":
-        print("breakfast time")
-    elif hour == "12":
-        print("lunch time")
-    elif hour == "13" and minute == "00":
-        print("lunch time")
-    elif hour == "18":
-        print("dinner time")
-    elif hour == "19" and minute == "00":
-        print("dinner time")
-    else:
-        None
-    
+    hour, minute = int(hour), int(minute)
+    return hour + minute/60
+
 if __name__ == "__main__":
     main()

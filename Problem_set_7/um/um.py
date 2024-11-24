@@ -1,11 +1,11 @@
 import re
 
 def main():
-    print(count(input("Text: ")))
+    print(count(input("Text: ").strip()))
 
 
 def count(text):
-    um = re.findall(r"\bum\b", text)
+    um = re.findall(r"\bum\b", text.lower())
     return len(um)
 
 

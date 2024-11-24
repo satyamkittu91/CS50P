@@ -10,4 +10,4 @@ while Amount_due > 0:
         total_paid = total_paid + pay
 
 if total_paid >= Amount_due:
-    print(f"change owed: {total_paid - 50}")
+    print(f"Change Owed: {total_paid - 50}")

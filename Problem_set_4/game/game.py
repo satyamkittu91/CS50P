@@ -23,17 +23,17 @@ while True:
         if guessed_word < 0:
             continue
         else:
-        
+
 
 
             if guessed_word > random_word:
-                print("Too Large")
+                print("Too Large!")
                 continue
             elif guessed_word < random_word:
-                print("Too small")
+                print("Too small!")
                 continue
             elif guessed_word == random_word:
-                print("Just Right")
+                print("Just Right!")
                 break
             else:
                 continue

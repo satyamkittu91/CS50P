@@ -1,11 +1,11 @@
 
 class Jar():
-    def __init__(self, cookies=0, capacity=12):
+    def __init__(self, capacity=12, cookies=0):
         if capacity < 0:
             raise ValueError
-    
-        self._capacity = capacity
-        self.cookies = cookies
+        else:
+            self._capacity = capacity
+            self.cookies = cookies
 
     def __str__(self):
         return self.cookies*"🍪"

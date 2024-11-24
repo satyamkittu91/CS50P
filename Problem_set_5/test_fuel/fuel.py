@@ -1,34 +1,42 @@
 def main():
     '''takes user input'''
     while True:
-        input = input("Fraction: ")
-        a = get_fraction(input)
-        if a is not None:
-            print(a)
+        try:
+            frac = input("convert: ").strip()
+            a = convert(frac)
+        except:
+            pass
+        else:
             break
+        a = gauge(a)
+        print(a)
 
-    
-    
 
-def get_fraction(input):
+
+
+def convert(input):
     '''do all the calculations regarding fuel'''
-    
+
     x, y = input.split("/")
     x = int(x)
     y = int(y)
+    percentage = x/y * 100
+    if x > y:
+        raise ValueError
+    elif y == 0:
+        raise ZeroDivisionError
+    else:
+        return int(round(percentage))
+
+def gauge(percentage):
     
-    try:
-        precentage = x/y * 100
-        if x > y:
-            raise ValueError
-        if precentage <= 1:
-            return "E"
-        elif precentage >= 99:
-            return "F"
-        else:
-            return f"{precentage}%"
-    except (ValueError, ZeroDivisionError):
-        return None
+    if percentage <= 1:
+        return "E"
+    elif percentage >= 99:
+        return "F"
+    else:
+        return f"{percentage}%"
+
 
 if __name__ == '__main__':
     main()

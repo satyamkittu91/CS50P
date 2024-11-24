@@ -1,16 +1,21 @@
+import sys
 items = []
+items.sort()
+exiting = False
 while True:
     try:
-        item = input("Item: ")
+        item = input().title()
         items.append(item)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError):
+        exiting = True
         break
 
-print("\n")
-goods = []
-for i in items:
-    a = items.count(i)
-    if i not in goods:
-        goods.append(i)
-
-        print(f"{a}. {i}")
+if exiting:
+    #print("\n")
+    items_name = set()
+    for i in items:
+        items_name.add(i)
+    for item in items_name:
+        a = items.count(item)
+        print(f"{a} {item.upper()}", end='\n')
+    sys.exit(0)

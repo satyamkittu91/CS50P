@@ -19,3 +19,6 @@ def test_special():
     assert is_valid("tt2.3") == False
     assert is_valid("aa a2") == False
     assert is_valid("saty91") == True
+
+def test_zero():
+    assert is_valid("CS05") == False

@@ -1,4 +1,4 @@
-txt = input("Input Here: ").replace(":)", "🙂").replace(":(", "☹️")
+txt = input("Input Here: ").replace(":)", "🙂").replace(":(", "🙁")
 
 
 print(txt)

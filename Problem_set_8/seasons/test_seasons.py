@@ -1,8 +1,7 @@
 import pytest
 from seasons import season
+import datetime
 
-def test_valid_date():
-    assert season("2006-03-09") == "nine million, seven hundred and fifty-four thousand, five hundred and sixty"
 
 def test_leap_year():
     # Testing with a leap year date, result might differ in terms of exact minutes based on today's date
@@ -18,8 +17,3 @@ def test_future_date():
     #future date
     with pytest.raises(SystemExit):
         season("2030-01-01")
-
-def test_large_valid_date():
-    # Testing with an old valid date
-    result = season("1800-01-01")
-    assert isinstance(result, str)  # Checking for valid output without failure

@@ -9,21 +9,16 @@ menu = {
     "Taco": 3.00,
     "Tortilla Salad": 8.00
 }
-order_list = []
 
 def main():
+    total = 0
     while True:
         try:
-            order = input("Item: ")
-            for key,value in menu.items():
-                if key == order:
-                    order_list.append(value)
-            
-            sum = 0
-            for i in order_list:
-                sum = sum + i
-            print(f"Total: {sum}$")
-        except KeyboardInterrupt:
+            order = input("Item: ").strip().lower().title()
+            if order in menu:
+                total = total + float(menu[order])
+                print(f"${total:.2f}")
+        except (KeyboardInterrupt, EOFError):
             break
 
 

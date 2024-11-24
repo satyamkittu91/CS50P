@@ -12,7 +12,8 @@ months = [
     "November",
     "December"
 ]
-input_date = input("Date: ")
+
+input_date = input("Date: ").strip()
 
 while True:
     try:
@@ -25,8 +26,10 @@ while True:
             mm = mm + 1
             if int(mm) > 12 or int(dd) > 31:
                 raise ValueError
+            else:
+                print(f"{yyyy}-{mm:0>2}-{dd:0>2}")
+        else:
+            raise ValueError
     except (ValueError, KeyError, AttributeError, NameError):
         pass
-    else:
-        print(f"{yyyy}-{mm:0>2}-{dd:0>2}")
-        break
+

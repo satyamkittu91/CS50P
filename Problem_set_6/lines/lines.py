@@ -14,8 +14,13 @@ def main():
     else:
         count = 0
         for line in lines:
-            if line.lstrip()[0] != r"#":
-                count += 1
+            line = line.strip()
+            if len(line) > 0:
+                if line.lstrip() == "" or line.lstrip() == "\n":
+                    continue
+                if line.lstrip()[0] != r"#":
+                    count += 1
+
 
         print(count)        
 

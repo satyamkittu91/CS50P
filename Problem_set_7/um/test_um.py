@@ -21,9 +21,9 @@ def test_um_with_other_words():
     # Test where "um" occurs with other words, but also inside another word
     assert count("yummy um") == 1
     assert count("um yummy um") == 2
-    assert count("yummy ummy um") == 1  # Only counts "um" as a standalone word
-    assert count("Um") == 0  # "Um" should not be counted because of case sensitivity
-    assert count("UM") == 0  # "UM" in uppercase shouldn't match
+    assert count("yummy ummy um") == 1
+    assert count("Um") == 1
+    assert count("UM") == 1
 
 def test_um_boundary():
     # Test where "um" is next to non-word characters or spaces

@@ -4,11 +4,13 @@ def main():
     print(shorten(full_word))
 
 
+
 def shorten(word):
+    shortned_word = ''
     for char in word:
-        if char in "aeiou":
-            word = word.replace(char, '')
-    return word
+        if char not in "aeiouAEIOU" and char.isalpha():
+            shortned_word = shortned_word + char
+    return shortned_word
 
 if __name__ == "__main__":
     main()

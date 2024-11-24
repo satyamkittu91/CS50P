@@ -1,8 +1,8 @@
-greet = input("Greeting: ")
+greet = input("Greeting: ").strip().lower()
 
-if greet == "Hello" or greet == "hello":
+if "hello" in greet:
     print("$0")
-elif greet[0] in ["h", "H"] and greet.lower() != "hello":
+elif 'h' in greet[0][0] and "hello" not in greet:
     print("$20")
 else:
     print("$100")
