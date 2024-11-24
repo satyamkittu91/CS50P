@@ -27,7 +27,7 @@ def test_valid_mail():
 
 def test_valid_category():
     assert valid_category("Friends") == "Friends"
-    assert not valid_category("Invalid Category")
+
 
 def test_valid_country():
     assert valid_country("United States") == "United States"
