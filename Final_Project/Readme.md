@@ -24,15 +24,12 @@ The brain of the project, this file handles all the operations—adding, updatin
 This module allows you to create and manage contact categories. You can even set a default category to streamline adding new contacts, making organization simple and personalized.
 
 ### 5. **`user_interface.py`**
-This is where the magic happens—your command-line interface for interacting with the Contact Manager. From here, you can navigate the program, execute commands, and get help if needed.
+This is where the magic happens—your command-line interface for interacting with the Contact Manager. From here, you can navigate the program, execute commands, and get help if needed. The main file that brings everything together. Run this file to start managing your contacts right away.
 
-### 6. **`project.py`**
-The main file that brings everything together. Run this file to start managing your contacts right away.
-
-### 7. **`categories.txt`**
+### 6. **`categories.txt`**
 This file keeps track of all your contact categories, including custom ones. It updates automatically whenever you make changes.
 
-### 8. **`main.csv`**
+### 7. **`main.csv`**
 This is your contact database, where all your contacts are stored. If it doesn’t exist yet, the program will create it automatically when you add your first contact. It’s stored in CSV format, so you can also view or edit it manually if needed.
 
 ## Design Choices: Why I Did What I Did
