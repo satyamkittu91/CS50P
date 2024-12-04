@@ -24,12 +24,14 @@ while True:
             mm, dd = mmdd.split(" ")
             mm = months.index(mm)
             mm = mm + 1
-            if int(mm) > 12 or int(dd) > 31:
-                raise ValueError
-            else:
-                print(f"{yyyy}-{mm:0>2}-{dd:0>2}")
+            
         else:
             raise ValueError
+        if int(mm) > 12 or int(dd) > 31:
+                raise ValueError
+        else:
+            print(f"{yyyy}-{mm:0>2}-{dd:0>2}")
+            break
     except (ValueError, KeyError, AttributeError, NameError):
         pass
 
