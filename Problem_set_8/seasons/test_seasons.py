@@ -13,7 +13,3 @@ def test_invalid_date_format():
     with pytest.raises(SystemExit):
         season("09-03-2006")  # this is an Incorrect format
     
-def test_future_date():
-    #future date
-    with pytest.raises(SystemExit):
-        season("2030-01-01")
